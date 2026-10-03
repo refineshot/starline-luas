@@ -1,10 +1,9 @@
-﻿local ffi = ffi
+local ffi = ffi
 
 local ASSET_REPO_URL = "https://raw.githubusercontent.com/refineshot/starline-luas/main/data/scaleform/art/"
 
 local menu = ui.Group("Scaleform HUD")
 local ui_enabled = menu.Checkbox("Enable Scaleform", true)
-local ui_reskin_interval = menu.SliderInt("Reskin Interval", 5, 60, 10)
 
 ffi.cdef[[
     typedef void (__fastcall *fnParseImageUrl)(void* out, const char* url);
@@ -5849,7 +5848,7 @@ local function force_reload()
     end
 end
 
-menu.Button("Reload", force_reload)
+menu.Button("Reskin", force_reload)
 menu.Button("Redownload Assets", function()
     for _, name in ipairs(ART_FILES) do
         file.Delete("scaleform/art/" .. name)
@@ -5878,11 +5877,6 @@ local function tick_hud_lifecycle()
             load_all_scripts(hud)
             g_loadedHud = hud
             g_lastLoadAt = now
-        end
-    else
-        local interval_ms = ui_reskin_interval:Get() * 1000
-        if interval_ms > 0 and (now - g_lastLoadAt) >= interval_ms then
-            g_loadedHud = nil
         end
     end
 end
